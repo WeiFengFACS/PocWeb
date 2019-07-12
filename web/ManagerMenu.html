@@ -1,0 +1,622 @@
+<div class="header1">
+	<div class="container">
+
+		<div class="row">
+			<!-- OPen Menu Part 
+			============================================-->
+			<div class="col-md-3">
+				<div class="panel panel-success">
+					<div class="panel-heading tableTitle">
+						<p class="lead">WELCOME {{params.userName}}</p>
+					</div>
+					<div class="panel-body">
+						<div class="btn-group-vertical">
+							<button type="button" class="btn-group showButton btn-info"
+								style="border-radius: 5px; width: 230px"
+								ng-click="getPersonalInfo()">Personal Information</button>
+							<button type="button" class="btn-group showButton btn-primary"
+								ng-click="checkRowPerPage(1)">View All Employee
+								Information</button>
+
+							<button type="button" class="btn-group showButton btn-info"
+								ng-click="checkRowPerPageGroup(1)">Group Information</button>
+							<button type="button" class="btn-group showButton btn-primary"
+								ng-click="checkRowPerPageAvailable(1)">View Available
+								Employee</button>
+							<button type="button" class="btn-group showButton btn-info"
+								ng-click="logOut()">Logout</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Close Menu Part -->
+			<div class="col-md-9">
+				<!-- loading Message Part -->
+				<div align="center" ng-hide="loading">
+				<br><br><br><br><br><br><br>
+					<h3>
+						<div class="label label-warning" align="center">Loading Info
+							...</div>
+					</h3>
+				</div>
+				<!-- CLose Loading Message Part -->
+
+				<!-- Open View All Employee Part 
+				============================================-->
+				<div align="center" ng-hide="allEmpPart">
+
+					<div class="panel panel-default panel-success">
+						<div class="panel-heading tableTitle">Employee List</div>
+						<div class="panel-body">
+							<!-- Open select row -->
+							<div class="row">
+								<div class="col-sm-4">
+
+									<select
+										class="btn btn-default btn-sm dropdown-toggle dropDownList"
+										data-toggle="dropdown" ng-model="rowPerPage"
+										ng-options="c.pageNumber for c in pages"
+										ng-change="checkRowPerPage(1)">
+										<!--   <option value="">-- Select Page --</option>  -->
+									</select>
+									<div class="dropDownList">records per page</div>
+									{{rowPerPage.pageNumber}}
+								</div>
+								<!--  <div class=" col-sm-offset-2 col-sm-8"> -->
+								<div class="col-sm-8">
+									<form class="form-horizontal" role="form">
+										<div class="form-group">
+											<label for="inputEmail3" class="col-sm-4 control-label">
+												Enter email address: </label>
+											<div class="col-sm-5">
+
+												<input type="email" class="form-control"
+													ng-model="userNameInput" placeholder="Email Address">
+											</div>
+											<div class="col-sm-2">
+												<input type="submit" class="btn btn-success"
+													ng-click="viewEmpByID()" value="Search">
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<!-- Close Select Row -->
+							<span class="label label-danger" ng-hide="resultMessageShow">{{resultMessage}}</span>
+
+							<table
+								class="tableTimesheet contentTable table table-striped table-bordered bootstrap-datatable datatable contentTable">
+								<tbody>
+									<tr>
+										<th>Role</th>
+										<th>User Name</th>
+										<th>First Name</th>
+										<th>Last Name</th>
+										<th>Employee Number</th>
+										<th>Group ID</th>
+										<th>Operation</th>
+									</tr>
+									<tr ng-repeat="employee in allEmp">
+										<td>{{employee.role}}</td>
+										<td>{{employee.userName}}</td>
+										<td>{{employee.fName}}</td>
+										<td>{{employee.lName}}</td>
+										<td>{{employee.empNum}}</td>
+										<td>{{employee.groupID}}</td>
+										<td><input type="submit" class="btn btn-info"
+											ng-click="viewDetail(employee.userName)" value="View Detail"></td>
+										<!--  <td ng-hide = "totalPageShow" ng-model = "totalPage">{{employee.totalPage}}</td>  -->
+									</tr>
+								</tbody>
+							</table>
+
+							<!-- Use Pagination -->
+							<pagination total-items="bigTotalItems" page="bigCurrentPage"
+								on-select-page="setPage(page)" max-size="maxSize"
+								class="pagination-sm" boundary-links="true" rotate="false"
+								num-pages="numPages"></pagination>
+							<pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>
+							<!-- Close Pagination -->
+
+							<!-- view page table -->
+							<table>
+								<tbody>
+
+									<tr>
+										<th ng-repeat="pageTest in totalPageView"><input
+											type="button"
+											!!!!onclick="var $scope = angular.element(event.target).scope(); $scope.checkRowPerPage($scope.pageTest.pageID); $scope.$apply()"
+											value={{pageTest.pageID}}> <!-- <input type="submit" ng-click="getPageID()" value = {{pageTest.pageID}} ></th> -->
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- close panel body -->
+					</div>
+					<!-- close panel -->
+				</div>
+				<!-- Close View All Employee Part -->
+
+				<!-- Open Create Group Part 
+	============================================-->
+				<div align="center" ng-hide="createGroupPart">
+					<div class="panel panel-default panel-success">
+						<div class="panel-heading tableTitle">Group Information</div>
+						<div class="panel-body">
+							<!-- Open select row -->
+							<div class="row">
+								<div class="col-md-12">
+									<div ng-hide="noGroupPart">
+										<div ng-hide="noGroupMessageShow">
+											<h3>
+												<div class="label label-warning">You are not manage
+													any group at this time.</div>
+											</h3>
+											<input type="submit" class="btn btn-info"
+												ng-click="showCreate()" value="Create Group">
+										</div>
+										<div ng-hide="createGroupShow">
+											<form class="form-horizontal" role="form">
+												<div class="form-group">
+													<label for="inputEmail3" class="col-sm-4 control-label">
+														Please Enter Group ID: </label>
+													<div class="col-sm-5">
+
+														<input type="text" class="form-control" ng-model="groupID"
+															placeholder="Group ID">
+													</div>
+													<div class="col-sm-2">
+														<input type="submit" class="btn btn-success"
+															ng-click="createGroupFeature()" value="Create">
+													</div>
+													<br />
+													<h4>
+														<div class="label label-danger"
+															ng-hide="createGroupMessageShow">{{createGroupMessage}}</div>
+													</h4>
+
+												</div>
+											</form>
+										</div>
+									</div>
+									<div ng-hide="showGroupPart">
+										<div class="row">
+											<div class="col-sm-4">
+												<select
+													class="btn btn-default btn-sm dropdown-toggle dropDownList"
+													data-toggle="dropdown" ng-model="rowPerPageGroup"
+													ng-options="c.pageNumberGroup for c in pagesGroup"
+													ng-change="checkRowPerPageGroup(1)">
+													<!--   <option value="">-- Select Page --</option>  -->
+												</select>
+												<div class="dropDownList">records per page</div>
+
+												<!--  <div class=" col-sm-offset-2 col-sm-8"> -->
+
+
+											</div>
+											<div class="col-sm-8" align="right">
+												<form class="form-horizontal" role="form">
+													<input type="submit" class="btn btn-danger"
+														ng-click="dropGroup()" value="Drop Group">
+												</form>
+											</div>
+										</div>
+										<span class="label label-danger" align="center"
+											ng-hide="resultMessageShow">{{resultMessage}}</span>
+
+										<table
+											class="tableTimesheet contentTable table table-striped table-bordered bootstrap-datatable datatable contentTable">
+											<tbody>
+												<tr>
+													<th>Role</th>
+													<th>User Name</th>
+													<th>First Name</th>
+													<th>Last Name</th>
+													<th>Employee Number</th>
+													<th>Gender</th>
+													<!-- <th>Age</th>
+										<th>Phone Number</th>
+										<th>Address</th> -->
+													<th>Operation</th>
+													<th>Timesheet</th>
+												</tr>
+												<tr ng-repeat="employeeGroup in groupEmp ">
+													<td>{{employeeGroup.role}}</td>
+													<td>{{employeeGroup.userName}}</td>
+													<td>{{employeeGroup.fName}}</td>
+													<td>{{employeeGroup.lName}}</td>
+													<td>{{employeeGroup.empNum}}</td>
+													<td>{{employeeGroup.gender}}</td>
+													<!-- <td>{{employeeGroup.age}}</td>
+										<td>{{employeeGroup.phoneNum}}</td>
+										<td>{{employeeGroup.address}}</td> -->
+													<td><input type="submit" class="btn btn-success"
+														style="width: 80px"
+														ng-click="deleteFromGroup(employeeGroup.userName)"
+														value="Delete"></td>
+													<td><input type="submit" class="btn btn-warning"
+														style="width: 80px"
+														ng-click="checkRowPerPageTimesheet(1, employeeGroup.userName, employeeGroup.fName, employeeGroup.lName)"
+														value="View"></td>
+												</tr>
+											</tbody>
+										</table>
+
+
+										<!-- Use Pagination -->
+										<pagination total-items="bigTotalItems" page="bigCurrentPage"
+											on-select-page="setPageGroup(page)" max-size="maxSize"
+											class="pagination-sm" boundary-links="true" rotate="false"
+											num-pages="numPages"></pagination>
+										<pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>
+										<!-- Close Pagination -->
+
+
+									</div>
+									<h3>
+										<div class="label label-success" align="center"
+											ng-hide="dropGroupMessageShow">{{dropGroupMessage}}</div>
+									</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Close Create Group Part -->
+
+				<!-- Open No Timesheet Message Part -->
+				<div align="center" ng-hide="noTimesheetPart">
+					<div class="panel panel-default panel-success">
+						<div class="panel-heading tableTitle">Timesheet</div>
+						<div class="panel-body">
+							<form class="form-horizontal" role="form">Employee Name:
+								{{employeeName}}</form>
+							<h3>
+								<div class="label label-success">No timesheet need to be
+									approved at this time</div>
+							</h3>
+							<input type="submit" class="btn btn-warning btn-sm"
+								ng-click="checkRowPerPageGroup(currentPageGroup)" value="Close">
+						</div>
+					</div>
+				</div>
+				<!-- Close No Timesheet Message Part -->
+
+				<!-- Open View Timesheet Part -->
+
+				<div ng-hide="timesheetInfoShow" align="center">
+					<div class="panel panel-default panel-success">
+						<div class="panel-heading tableTitle">Timesheet</div>
+						<div class="panel-body">
+							<!-- Open select row -->
+							<div class="row">
+								<div class="col-sm-4">
+
+									<select
+										class="btn btn-default btn-sm dropdown-toggle dropDownList"
+										data-toggle="dropdown" ng-model="rowPerPageTimesheet"
+										ng-options="c.pageNumberTimesheet for c in pagesTimesheet"
+										ng-change="checkRowPerPageTimesheet(1, employeeUserName, firstName, lastName)">
+										<!--   <option value="">-- Select Page --</option>  -->
+									</select>
+									<div class="dropDownList">records per page</div>
+									{{rowPerPageTimesheet.pageNumberTimesheet}}
+								</div>
+								<!--  <div class=" col-sm-offset-2 col-sm-8"> -->
+								<div class="col-sm-6" align="right">
+									<form class="form-horizontal" role="form">Employee Name:
+										{{employeeName}}</form>
+								</div>
+								<div class="col-sm-1">
+									<input type="submit" class="btn btn-warning btn-sm"
+										ng-click="checkRowPerPageGroup(currentPageGroup)"
+										value="Close">
+								</div>
+
+							</div>
+							<!-- Close Select Row -->
+
+							<table
+								class=" contentTable table table-striped table-bordered bootstrap-datatable datatable contentTable">
+								<tbody>
+									<tr class="tableTimesheet">
+										<!-- 	<th class="checkbox" style = "padding: 10px 10px"></th> -->
+										<th>Period</th>
+										<th>Regular Hours</th>
+										<th>Overtime Hours</th>
+										<th>Total Hours</th>
+										<th>Attachment</th>
+										<th>Approve</th>
+									</tr>
+									<!-- <tr ng-repeat="employee in allEmp"> -->
+									<tr ng-repeat="totalSheets in totalTimesheet"
+										class="tabledetail">
+
+										<td>{{totalSheets.date}} - {{totalSheets.endDate}}</td>
+										<td>{{totalSheets.regularHr | number:2}}</td>
+										<td>{{totalSheets.otHr | number:2}}</td>
+										<td>{{totalSheets.totalHr | number:2}}</td>
+										<td ng-click="viewPDF(totalSheets.URL)">{{totalSheets.URL}}</td>
+										<!-- 	<button type="button" class="btn btn-default btn-sm" ng-click="viewPDF(totalSheets.URL)">
+  <span class="glyphicon glyphicon-open"></span> </button></td> -->
+										<td><input type="submit" class="btn btn-info"
+											ng-click="approveTimesheet(employeeUserName, totalSheets.date)"
+											value="Approve"></td>
+									</tr>
+								</tbody>
+							</table>
+
+							<!-- Use Pagination -->
+							<pagination total-items="bigTotalItems" page="bigCurrentPage"
+								on-select-page="setPageTimesheet(page)" max-size="maxSize"
+								class="pagination-sm" boundary-links="true" rotate="false"
+								num-pages="numPages"></pagination>
+							<pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>
+							<!-- Close Pagination -->
+
+
+						</div>
+						<!-- close panel body -->
+					</div>
+				</div>
+
+				<!-- Close View Timesheet Part -->
+
+				<!-- Open View Available Emp Part 
+	================================================-->
+				<div align="center" ng-hide="viewAvailablePart">
+					<div class="panel panel-default panel-success">
+						<div class="panel-heading tableTitle">Available Employee
+							List</div>
+						<div class="panel-body">
+							<!-- Open select row -->
+							<div class="row">
+								<div class="col-md-12">
+									<div ng-hide="noAvailableShow">
+										<h3>
+											<div class="label label-success">No available employee
+												at this time.</div>
+										</h3>
+									</div>
+									<div ng-hide="showAvailableEmpPart">
+										<div class="row">
+											<div class="col-sm-4">
+												<select
+													class="btn btn-default btn-sm dropdown-toggle dropDownList"
+													data-toggle="dropdown" ng-model="rowPerPageAvailable"
+													ng-options="c.pageNumberAvailable for c in pagesAvailable"
+													ng-change="checkRowPerPageAvailable(1)">
+													<!--   <option value="">-- Select Page --</option>  -->
+												</select>
+												<div class="dropDownList">records per page</div>
+											</div>
+											<div class="col-sm-8">
+												<div class="label label-warning"
+													ng-hide="noRightToAddToGroupShow">You are not manage
+													any group yet, you cannot add employee to group at this
+													time.</div>
+											</div>
+										</div>
+
+										<table
+											class="tableTimesheet contentTable table table-striped table-bordered bootstrap-datatable datatable contentTable">
+											<tbody>
+												<tr>
+													<th>Role</th>
+													<th>User Name</th>
+													<th>First Name</th>
+													<th>Last Name</th>
+													<th>Employee Number</th>
+													<th>Gender</th>
+													<th>Age</th>
+													<th>Phone Numebr</th>
+													<th>Address</th>
+													<th>Operation</th>
+												</tr>
+												<tr ng-repeat="employeeAvailable in availableEmp ">
+													<td>{{employeeAvailable.role}}</td>
+													<td>{{employeeAvailable.userName}}</td>
+													<td>{{employeeAvailable.fName}}</td>
+													<td>{{employeeAvailable.lName}}</td>
+													<td>{{employeeAvailable.empNum}}</td>
+													<td>{{employeeAvailable.gender}}</td>
+													<td>{{employeeAvailable.age}}</td>
+													<td>{{employeeAvailable.phoneNum}}</td>
+													<td>{{employeeAvailable.address}}</td>
+													<td><input type="submit" class="btn btn-warning"
+														style="width: 80px" ng-disabled="(managerGroupID == '0')"
+														ng-click="addToGroup(employeeAvailable.userName)"
+														value="ADD"></td>
+												</tr>
+											</tbody>
+										</table>
+
+
+										<!-- Use Pagination -->
+										<pagination total-items="bigTotalItems" page="bigCurrentPage"
+											on-select-page="setPageAvailable(page)" max-size="maxSize"
+											class="pagination-sm" boundary-links="true" rotate="false"
+											num-pages="numPages"></pagination>
+										<!-- Item-per-page thing -->
+										<pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>
+								
+										<!-- Close Pagination -->
+
+
+									</div>
+									<h3>
+										<div class="label label-success" align="center"
+											ng-hide="dropGroupMessageShow">{{dropGroupMessage}}</div>
+									</h3>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Close View Available Emp Part -->
+
+
+
+				<!-- Open Modal Part 
+				============================================-->
+				<script type="text/ng-template" id="myModalContent.html">
+        
+        	<div class="modal-body">
+				<div class="panel panel-default panel-success">
+					<div class="panel-heading tableTitle">Employee Information</div>
+						<div class="panel-body">
+<h4><div class="label label-danger" ng-hide="noAdminShow">{{noAdminMessage}}</div></h4>
+<div ng-hide = "showEmpInfo">
+						<table
+							class=" contentTable table table-striped table-bordered bootstrap-datatable datatable contentTable">
+							<tbody>
+								<tr>
+									<th>role</th>
+									<td id="showRole">{{showRole}}</td>
+								<tr>
+								<tr>
+									<th>User Name</th>
+									<td id="email">{{email}}</td>
+								<tr>
+								<tr>
+									<th>First Name</th>
+									<td id="showFName">{{showFName}}</td>
+								<tr>
+								<tr>
+									<th>Last Name</th>
+									<td id="showLName">{{showLName}}</td>
+								<tr>
+								<tr>
+									<th>Employee Number</th>
+									<td id="showEmpNum">{{showEmpNum}}</td>
+								<tr>
+								<tr>
+									<th>Gender</th>
+									<td id="showGender">{{showGender}}</td>
+								<tr>
+								<tr>
+									<th>Age</th>
+									<td id="showAge">{{showAge}}</td>
+								<tr>
+								<tr>
+									<th>Phone Number</th>
+									<td id="showPhoneNum">{{showPhoneNum}}</td>
+								<tr>
+								<tr>
+									<th>Address</th>
+									<td id="showAddress">{{showAddress}}</td>
+								<tr>
+								<tr>
+									<th>Group ID</th>
+									<td id="showGroupID">{{showGroupID}}</td>
+								<tr>
+							</tbody>
+						</table>
+<div>
+					</div>
+				</div>
+			<button class="btn btn-warning" ng-click="cancel()">Ok</button>
+        </div>
+        
+    </script>
+				<!-- Close Modal Part -->
+
+
+				<!-- Open Show One Employee info Part
+				============================================-->
+				<div class="row">
+					<div class="col-md-offset-3 col-md-6">
+						<div align="center" ng-hide="empShow">
+							<div class="panel panel-default panel-success">
+								<div class="panel-heading tableTitle">Employee Information</div>
+								<div class="panel-body">
+
+									<table
+										class="tableTimesheet contentTable table table-striped table-bordered bootstrap-datatable datatable contentTable">
+										<tbody>
+											<tr>
+												<th>role</th>
+												<td id="showRole">{{showRole}}</td>
+											<tr>
+											<tr>
+												<th>User Name</th>
+												<td id="email">{{email}}</td>
+											<tr>
+											<tr>
+												<th>First Name</th>
+												<td id="showFName">{{showFName}}</td>
+											<tr>
+											<tr>
+												<th>Last Name</th>
+												<td id="showLName">{{showLName}}</td>
+											<tr>
+											<tr>
+												<th>Employee Number</th>
+												<td id="showEmpNum">{{showEmpNum}}</td>
+											<tr>
+											<tr>
+												<th>Gender</th>
+												<td id="showGender">{{showGender}}</td>
+											<tr>
+											<tr>
+												<th>Age</th>
+												<td id="showAge">{{showAge}}</td>
+											<tr>
+											<tr>
+												<th>Phone Number</th>
+												<td id="showPhoneNum">{{showPhoneNum}}</td>
+											<tr>
+											<tr>
+												<th>Address</th>
+												<td id="showAddress">{{showAddress}}</td>
+											<tr>
+											<tr>
+												<th>Group ID</th>
+												<td id="showGroupID">{{showGroupID}}</td>
+											<tr>
+										</tbody>
+									</table>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+
+				<!-- change later 
+		<div align="center" id = "managerExtra" style="display:none">
+		Department: <label id = "dept"></label><br>
+		Number of Employees: <label id = "numOfEmp"></label><br>
+		</div>
+		
+		<div align="center" id = "developerExtra" style="display:none">
+		Skills: <label id = "skill"></label><br>
+		Years of experiences: <label id = "yearsOfExp"></label><br>
+		</div>
+		
+		<div align="center" id = "QAExtra" style="display:none">
+		Tools: <label id = "tools"></label><br>
+		Project Name: <label id = "projectNameQA"></label><br>
+		</div>
+		
+		<div align="center" id = "TrainingExtra" style="display:none">
+		Project Name: <label id = "projectNameT"></label><br>
+		Number of students: <label id = "numOfStudent"></label><br>
+		</div>
+          -->
+
+				<!-- close Show Employee info Part -->
+
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+

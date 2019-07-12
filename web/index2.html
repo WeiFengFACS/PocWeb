@@ -1,0 +1,91 @@
+<html ng-app="myApp" lang="en-US"><head>
+        <title>Employee Management System</title>
+        <meta http-equiv="x-ua-compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-touch-fullscreen" content="yes">
+       <link rel="stylesheet" type="text/css" href="./CSS/bootstrap.css" />
+<link
+	href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="./CSS/mystyle.css" />
+        <link rel="stylesheet" type="text/css" href="./assets/snap.css">
+        <link rel="stylesheet" type="text/css" href="./assets/demo.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    </head>
+    <body data-twttr-rendered="true" ng-controller="Login">
+        <div class="snap-drawers">
+            <div class="snap-drawer snap-drawer-left">
+                <div>
+                    <h3>InfoSys</h3>
+                   
+                 
+                    <ul>
+                        <li><a href="#/Login" ng-hide="homeButton">Home</a></li>
+                       
+                       
+					<li><a href="#/ContactUs">Contact Us</a></li>
+					<li><a href="#/AboutUs">About Us</a></li>
+					<li class="dropdown"><a class="dropdown-toggle">Clients</a>
+						<ul class="dropdown-menu">
+							<li><a href="http://www.sears.com">Sears</a></li>
+							<li><a href="http://www.bestbuy.com">BestBuy</a></li>
+							<li><a href="http://http://www.target.com">Target</a></li>
+							<li><a href="http://www.walmart.com">Walmart</a></li>
+							<li><a href="http://www.staples.com">Staples</a></li>
+						    <li class="divider"></li>
+							<li><a href="#/Login">Back</a></li>
+                    </ul>
+                    <div>
+                       
+                        <p class="copyright text-muted small">Copyright &copy; 2013. All
+					Rights Reserved by InfoSys Inc.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="snap-drawer snap-drawer-right"></div>
+        </div>
+        
+        <div id="content" class="snap-content">
+            <div id="toolbar">
+                <a href="#" id="open-left"></a>
+               
+            </div>
+            
+            <ng-view></ng-view>
+        </div>
+         
+        
+       
+    
+
+</body>
+<script src = "./JavaScript/jquery-1.11.0.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.js"></script>
+<script
+	src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.9.0.js"></script>
+	 <script src="./JavaScript/snap.js"></script>
+	  <script src="./assets/demo.js"></script>
+          <script id="twitter-wjs" src="https://platform.twitter.com/widgets.js"></script><script type="text/javascript" src="../../snap.js"></script>
+           <script type="text/javascript">
+            var snapper = new Snap({
+                element: document.getElementById('content'),
+                disable: 'right'
+            });
+            
+        </script>
+      
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>   
+        <script src="./JavaScript/bootstrap.min.js"></script>
+<script src="./JavaScript/index.js"></script>
+<script src="./JavaScript/Login.js"></script>
+<script src="./JavaScript/Register.js"></script>
+<script src="./JavaScript/AdminMenu.js"></script>
+<script src="./JavaScript/EmployeeMenu.js"></script>
+<script src="./JavaScript/ManagerMenu.js"></script>
+<script src="./JavaScript/AboutUs.js"></script>
+<script src="./JavaScript/base64.js"></script>
+<script src="./JavaScript/sprintf.js"></script>
+<script src="./JavaScript/jspdf.js"></script>    
+	
+</html>

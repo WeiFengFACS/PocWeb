@@ -1,0 +1,304 @@
+<div class="header1"
+	style="background: url(./pic/bodybg.jpg) no-repeat center center fixed;">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-offset-2 col-md-8">
+				<div class="panel panel-warning">
+					<div class="panel-heading">
+						<h3 align="center">User Register</h3>
+					</div>
+					<div class="panel-body">
+						<!-- <div align="center">
+		<h3 align="center">User Register</h3>
+	</div> -->
+						<div align="center" ng-hide="loading">
+						<br><br><br><br><br><br><br>
+							<h3>
+								<div class="label label-warning" align="center">Loading
+									Info ...</div>
+							</h3>
+						<img src="./pic/welcome.jpg" class="img-rounded">
+						
+						</div>
+						<div ng-hide="registerForm">
+							<div class="tow">
+								<div class="col-md-4">
+									<div align=left class="form-horizontal" role="form">
+										<div class="form-group">
+											<div class="label label-primary">Role:</div>
+											<select class="btn btn-default btn-sm dropdown-toggle"
+												data-toggle="dropdown" ng-model="chooseRole"
+												ng-options="c.role for c in roles" ng-change="checkRole()">
+												<option value="">-- Select Role --</option>
+											</select>
+										</div>
+
+										<div class="label label-danger" ng-hide="resultM">{{resultMessage}}</div>
+										<div class="label label-warning" ng-hide="errorMessageShow">{{errorMessage}}</div>
+										<br /> <br />
+										<img src="./pic/welcome.jpg" class="img-rounded">
+										<div class="form-group">
+											<button type="submit" class="btn btn-warning"
+												ng-click="goLoginPage()">Back</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-8">
+									<form class="form-horizontal" role="form">
+										<div ng-hide="commonInfo">
+											<div class="form-group">
+												<label for="inputEmail3" class="col-sm-3 control-label">Email:</label>
+												<div class="col-sm-9">
+													<input type="email" class="form-control"
+														ng-model="userName" placeholder="Email">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="inputPassword3" class="col-sm-3 control-label">Password</label>
+												<div class="col-sm-9">
+													<input type="password" class="form-control"
+														ng-model="password" placeholder="Password">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">First Name:</label>
+												<div class="col-sm-9">
+													<input class="form-control" ng-model="fName"
+														placeholder="First Name">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">Last Name:</label>
+												<div class="col-sm-9">
+													<input class="form-control" ng-model="lName"
+														placeholder="Last Name">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">Gender:</label>
+												<div class="col-sm-9">
+													<input type="radio" ng-model="gender" value="Male">
+													Male <input type="radio" ng-model="gender" value="Female">
+													Female<br>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">Age:</label>
+												<div class="col-sm-9">
+													<input class="form-control" ng-model="age"
+														placeholder="Age">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">Phone Number:</label>
+												<div class="col-sm-9">
+												
+													<input ui-mask="{{'(999) 999-9999'}}" class="form-control" ng-model="phoneNum"
+														>
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">Address:</label>
+												<div class="col-sm-9">
+													<input class="form-control" ng-model="address"
+														placeholder="Address">
+												</div>
+											</div>
+
+											<div ng-hide="managerExtra">
+												<div class="form-group">
+													<label class="col-sm-3 control-label">Department:</label>
+													<div class="col-sm-9">
+														<input class="form-control" ng-model="dept"
+															placeholder="Department">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">Number of
+														Employees:</label>
+													<div class="col-sm-9">
+														<input class="form-control" ng-model="numOfEmp"
+															placeholder="Number of Employees">
+													</div>
+												</div>
+											</div>
+
+											<div ng-hide="developerExtra">
+												<div class="form-group">
+													<label class="col-sm-3 control-label">Skills:</label>
+													<div class="col-sm-9">
+														<input class="form-control" ng-model="skill"
+															placeholder="Skills">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">Years of
+														experiences:</label>
+													<div class="col-sm-9">
+														<input class="form-control" ng-model="yearsOfExp"
+															placeholder="Years of experiences">
+													</div>
+												</div>
+											</div>
+
+											<div ng-hide="QAExtra">
+												<div class="form-group">
+													<label class="col-sm-3 control-label">Tools:</label>
+													<div class="col-sm-9">
+														<input class="form-control" ng-model="tools"
+															placeholder="Tools">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">Project Name:</label>
+													<div class="col-sm-9">
+														<input class="form-control" ng-model="projectNameQA"
+															placeholder="Project Name">
+													</div>
+												</div>
+											</div>
+
+											<div ng-hide="TrainingExtra">
+												<div class="form-group">
+													<label class="col-sm-3 control-label">Project Name:</label>
+													<div class="col-sm-9">
+														<input class="form-control" ng-model="projectNameT"
+															placeholder="Project Name">
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-sm-3 control-label">Number of
+														students:</label>
+													<div class="col-sm-9">
+														<input class="form-control" ng-model="numOfStudent"
+															placeholder="Number of students">
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<div class="col-sm-offset-3 col-sm-9">
+													<button type="submit" class="btn btn-success"
+														ng-click="submitRegister()">Register</button>
+													<button type="submit" class="btn btn-info"
+														ng-click="reset()">Reset</button>
+
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<!-- End Register Form -->
+						<!-- Begin Show EMployee -->
+						<div class="row">
+							<div class="col-md-offset-3 col-md-6">
+								<div align="center" ng-hide="empShow">
+									<h4>
+										<div class="label label-success">{{successMessage}}</div>
+									</h4>
+									<table
+										class=" contentTable table table-striped table-bordered bootstrap-datatable datatable contentTable">
+										<tbody>
+											<tr>
+												<th>role</th>
+												<td id="showRole">{{showRole}}</td>
+											<tr>
+											<tr>
+												<th>User Name</th>
+												<td id="email">{{email}}</td>
+											<tr>
+											<tr>
+												<th>First Name</th>
+												<td id="showFName">{{showFName}}</td>
+											<tr>
+											<tr>
+												<th>Last Name</th>
+												<td id="showLName">{{showLName}}</td>
+											<tr>
+											<tr>
+												<th>Gender</th>
+												<td id="showGender">{{showGender}}</td>
+											<tr>
+											<tr>
+												<th>Age</th>
+												<td id="showAge">{{showAge}}</td>
+											<tr>
+											<tr>
+												<th>Phone Number</th>
+												<td id="showPhoneNum">{{showPhoneNum}}</td>
+											<tr>
+											<tr>
+												<th>Address</th>
+												<td id="showAddress">{{showAddress}}</td>
+											<tr>
+										</tbody>
+									</table>
+
+									<button type="submit" class="btn btn-warning"
+										ng-click="goLoginPage()">Back</button>
+
+								</div>
+							</div>
+							<div class="col-md-3"></div>
+						</div>
+						<!-- end Show Employee -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 
+
+
+<div align="center" align="center" ng-hide="empShow">
+	<label>{{successMessage}}</label><br> <br>Employee
+	Information:
+	<table border=1>
+		<tbody>
+			<tr>
+				<th>role</th>
+				<td ng-model="showRole">{{showRole}}</td>
+			<tr>
+			<tr>
+				<th>User Name</th>
+				<td ng-model="email">{{email}}</td>
+			<tr>
+			<tr>
+				<th>First Name</th>
+				<td ng-model="showFName">{{showFName}}</td>
+			<tr>
+			<tr>
+				<th>Last Name</th>
+				<td ng-model="showLName">{{showLName}}</td>
+			<tr>
+			<tr>
+				<th>Gender</th>
+				<td ng-model="showGender">{{showGender}}</td>
+			<tr>
+			<tr>
+				<th>Age</th>
+				<td ng-model="showAge">{{showAge}}</td>
+			<tr>
+			<tr>
+				<th>Phone Number</th>
+				<td ng-model="showPhoneNum">{{showPhoneNum}}</td>
+			<tr>
+			<tr>
+				<th>Address</th>
+				<td ng-model="showAddress">{{showAddress}}</td>
+			<tr>
+		</tbody>
+	</table>
+
+	<br> <input type="submit" ng-click="goLoginPage()" value="Login"><br />
+</div>
+</td>
+
+
+</tr>
+</table> -->
+

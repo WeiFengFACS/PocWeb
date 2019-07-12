@@ -1,0 +1,791 @@
+<div class="header1">
+	<div class="container">
+
+		<div class="row">
+			<!-- OPen Menu Part -->
+			<div class="col-md-3">
+				<div class="panel panel-info">
+					<div class="panel-heading tableTitle">
+						<p class="lead">WELCOME {{params.userName}}</p>
+					</div>
+					<div class="panel-body">
+						<div class="btn-group-vertical">
+							<button type="button" class="btn-group showButton btn-info"
+								style="border-radius: 5px; width: 230px"
+								ng-click="getPersonalInfo()">Personal Information</button>
+							
+							<button type="button" class="btn-group showButton btn-primary"
+								style="border-radius: 5px; width: 230px"
+								ng-click="checkRowPerPageTimesheet(1)">Timesheets</button>
+
+							<button type="button" class="btn-group showButton btn-info"
+								ng-click="logOut()">Logout</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- Close Menu Part -->
+			<div class="col-md-9">
+				<!-- loading Message Part -->
+				<div align="center" ng-hide="loading">
+				<br><br><br><br><br><br><br>
+					<h3>
+						<div class="label label-warning" align="center">Loading Info
+							...</div>
+					</h3>
+				</div>
+				<!-- CLose Loading Message Part -->
+
+
+				<!-- Show One Employee info -->
+				<div class="row">
+					<div class="col-md-offset-3 col-md-6">
+						<div align="center" ng-hide="empShow">
+							<div class="panel panel-default panel-success">
+								<div class="panel-heading tableTitle">Employee Information</div>
+								<div class="panel-body">
+
+									<table
+										class="tableTimesheet contentTable table table-striped table-bordered bootstrap-datatable datatable contentTable">
+										<tbody>
+											<tr>
+												<th>role</th>
+												<td id="showRole">{{showRole}}</td>
+											<tr>
+											<tr>
+												<th>User Name</th>
+												<td id="email">{{email}}</td>
+											<tr>
+											<tr>
+												<th>First Name</th>
+												<td id="showFName">{{showFName}}</td>
+											<tr>
+											<tr>
+												<th>Last Name</th>
+												<td id="showLName">{{showLName}}</td>
+											<tr>
+											<tr>
+												<th>Employee Number</th>
+												<td id="showEmpNum">{{showEmpNum}}</td>
+											<tr>
+											<tr>
+												<th>Gender</th>
+												<td id="showGender">{{showGender}}</td>
+											<tr>
+											<tr>
+												<th>Age</th>
+												<td id="showAge">{{showAge}}</td>
+											<tr>
+											<tr>
+												<th>Phone Number</th>
+												<td id="showPhoneNum">{{showPhoneNum}}</td>
+											<tr>
+											<tr>
+												<th>Address</th>
+												<td id="showAddress">{{showAddress}}</td>
+											<tr>
+											<tr>
+												<th>Group ID</th>
+												<td id="showGroupID">{{showGroupID}}</td>
+											<tr>
+										</tbody>
+									</table>
+
+
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+
+
+				<!-- change later 
+		<div align="center" id = "managerExtra" style="display:none">
+		Department: <label id = "dept"></label><br>
+		Number of Employees: <label id = "numOfEmp"></label><br>
+		</div>
+		
+		<div align="center" id = "developerExtra" style="display:none">
+		Skills: <label id = "skill"></label><br>
+		Years of experiences: <label id = "yearsOfExp"></label><br>
+		</div>
+		
+		<div align="center" id = "QAExtra" style="display:none">
+		Tools: <label id = "tools"></label><br>
+		Project Name: <label id = "projectNameQA"></label><br>
+		</div>
+		
+		<div align="center" id = "TrainingExtra" style="display:none">
+		Project Name: <label id = "projectNameT"></label><br>
+		Number of students: <label id = "numOfStudent"></label><br>
+		</div>
+          -->
+
+				<!-- close One Employee info -->
+
+
+				<!-- Open Timesheet -->
+				<div ng-hide="timesheetShow">
+
+					<!-- Open No Timesheet Message Part -->
+					<div align="center" ng-hide="noTimesheetPart">
+						<div class="panel panel-default panel-info">
+							<div class="panel-heading tableTitle">Timesheet Information</div>
+							<div class="panel-body">
+
+								<h3>
+									<div class="label label-success">No Timesheet at this
+										time</div>
+								</h3>
+
+								<form class="form-horizontal" role="form">
+									<input type="submit" class="btn btn-primary"
+										ng-click="createNewTimesheet()" value="New Timesheet">
+								</form>
+
+							</div>
+						</div>
+					</div>
+					<!-- Close No Timesheet Message Part -->
+
+					<!-- Open DatePicker -->
+					<div align="center" ng-hide="datePickerShow">
+						<div class="panel panel-default panel-info">
+							<div class="panel-heading tableTitle">New Timesheet</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-sm-6 col-md-offset-3">
+										<pre>Selected date is: <em>{{dt | date:'fullDate' }}</em>
+										</pre>
+
+										<div style="display: inline-block; min-height: 290px;">
+											<div class="well well-sm" ng-model="dt">
+												<datepicker show-weeks="showWeeks"
+													date-disabled="disabled(date, mode)" min="minDate"
+													max="maxDate"></datepicker>
+											</div>
+											<input type="submit" class="btn btn-success"
+												ng-click="checkTimesheetExist(dt)" value="Create Timesheet">
+											<input type="submit" class="btn btn-warning"
+												ng-click="cancelNewTimesheet()" value="Cancel"><br>
+											<div class="label label-danger"
+												ng-hide="createTimesheetMessageShow">{{createTimesheetMessage}}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Close DatePicker -->
+
+					<!-- Open Timesheet List Part -->
+					<div ng-hide="timesheetInfoShow" align="center">
+						<div class="panel panel-default panel-info">
+							<div class="panel-heading tableTitle">Timesheet</div>
+							<div class="panel-body">
+								<!-- Open select row -->
+								<div class="row">
+									<div class="col-sm-4">
+
+										<select
+											class="btn btn-default btn-sm dropdown-toggle dropDownList"
+											data-toggle="dropdown" ng-model="rowPerPageTimesheet"
+											ng-options="c.pageNumberTimesheet for c in pagesTimesheet"
+											ng-change="checkRowPerPageTimesheet(1)">
+											<!--   <option value="">-- Select Page --</option>  -->
+										</select>
+										<div class="dropDownList">records per page</div>
+										{{rowPerPageTimesheet.pageNumberTimesheet}}
+									</div>
+									<!--  <div class=" col-sm-offset-2 col-sm-8"> -->
+									<div class="col-sm-2">
+										<span class="label label-danger"
+											ng-hide="noEditRightMessageShow">No access to edit
+											this timesheet</span>
+									</div>
+									<div class="col-sm-5" align="right">
+
+										<form class="form-horizontal" role="form">
+											<input type="submit" class="btn btn-primary"
+												ng-click="createNewTimesheet()" value="New Timesheet">
+										</form>
+									</div>
+									<div class="col-sm-1"></div>
+								</div>
+								<!-- Close Select Row -->
+
+								<table
+									class=" contentTable table table-striped table-bordered bootstrap-datatable datatable contentTable">
+									<tbody>
+										<tr class="tableTimesheet">
+											<!-- 	<th class="checkbox" style = "padding: 10px 10px"></th> -->
+											<th>Period</th>
+											<th>Status</th>
+											<th>Regular Hours</th>
+											<th>Overtime Hours</th>
+											<th>Total Hours</th>
+											<th>Attachment</th>
+											<th>Client</th>
+											<!-- 	<th>Approve</th> -->
+											<th>View</th>
+											<th>Edit</th>
+										</tr>
+										<!-- <tr ng-repeat="employee in allEmp"> -->
+										<tr ng-repeat="totalSheets in totalTimesheet"
+											class="tabledetail">
+
+											<td>{{totalSheets.date}} - {{totalSheets.endDate}}</td>
+											<td>{{totalSheets.submit}}</td>
+											<td>{{totalSheets.regularHr | number:2}}</td>
+											<td>{{totalSheets.otHr | number:2}}</td>
+											<td>{{totalSheets.totalHr | number:2}}</td>
+											<td ng-click="viewPDF(totalSheets.URL)">{{totalSheets.URL}}</td>
+											<!-- 	<button type="button" class="btn btn-default btn-sm" ng-click="viewPDF(totalSheets.URL)">
+  <span class="glyphicon glyphicon-open"></span> </button></td> -->
+											<td>{{totalSheets.client}}</td>
+											<!-- 	<td>{{totalSheets.approve}}</td> -->
+											<td><input type="submit" class="btn btn-success"
+												ng-click="viewTimesheet(totalSheets.date)" value="View"></td>
+											<td><input type="submit" class="btn btn-warning"
+												ng-click="editTimesheet(totalSheets.date)"
+												ng-disabled="!(totalSheets.submit=='Not Due Yet')"
+												value="Edit"></td>
+										</tr>
+									</tbody>
+								</table>
+
+								<!-- Use Pagination -->
+								<pagination total-items="bigTotalItems" page="bigCurrentPage"
+									on-select-page="setPageTimesheet(page)" max-size="maxSize"
+									class="pagination-sm" boundary-links="true" rotate="false"
+									num-pages="numPages"></pagination>
+								<pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>
+								<!-- Close Pagination -->
+
+
+							</div>
+							<!-- close panel body -->
+						</div>
+					</div>
+					<!-- CLose Timesheet List Part -->
+
+
+					<!-- Open view timesheet -->
+					<div ng-hide="viewTimesheetShow">
+						<div class="panel panel-default panel-warning">
+							<div class="panel-heading tableTitle">View Timesheet</div>
+							<div class="panel-body">
+								<!-- Open select row -->
+								<div class="row">
+									<div class="col-sm-11 col-sm-offset-1">
+										<form class="form-horizontal" role="form">
+											<div class="form-group">
+												<input type="submit" class="btn btn-info"
+													ng-hide="editRightButton"
+													ng-click="editTimesheet(startDate)" value="Edit"> <input
+													type="submit" class="btn btn-primary"
+													ng-click="closeTimesheet()" value="Close">
+											</div>
+										</form>
+									</div>
+								</div>
+								<!-- Close Select Row -->
+
+								<div class="panel panel-default panel-warning">
+									<div class="panel-heading tableTitle" align="center">Timesheet
+										Information</div>
+									<div class="panel-body">
+										<table
+											class="tableTimesheet  contentTable table table-bordered bootstrap-datatable datatable ">
+											<tbody>
+												<tr>
+													<th>Employee Name</th>
+													<td>{{params.userName}}</td>
+													<td></td>
+													<td></td>
+													<th>Placement</th>
+													<td>{{client}}</td>
+												</tr>
+												<tr>
+													<th>Start Date</th>
+													<td>{{date_Sunday | date: 'MM/dd/yyyy'}}</td>
+													<td></td>
+													<td></td>
+													<th>End Date</th>
+													<td>{{date_Saturday | date: 'MM/dd/yyyy'}}</td>
+												</tr>
+												<tr>
+													<th>Attachment</th>
+													<td>{{URL}}
+														<button type="button" class="btn btn-default btn-sm"
+															ng-hide="viewPdfButton" ng-click="viewPDF(URL)">
+															<span class="glyphicon glyphicon-open"></span>
+														</button> <!-- <input type="submit" class="btn btn-success" 
+												ng-click="viewPDF()" value="View PDF"> -->
+
+													</td>
+													<td></td>
+													<td></td>
+													<th>Comments</th>
+													<td>{{comment}}</td>
+												</tr>
+
+												<tr>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<div class="panel panel-default panel-success">
+
+									<div class="panel-body">
+
+										<table
+											class=" contentTable table table-bordered bootstrap-datatable datatable ">
+											<tbody>
+												<tr class="tablespecial">
+													<td rowspan="2">Date</td>
+													<td colspan="3">Worked Hours</td>
+													<td colspan="2">Other Hours</td>
+													<td rowspan="2">Total Hrs</td>
+													<td rowspan="2">Tasks</td>
+												</tr>
+												<tr class="tablespecial">
+													<td>Regular Hrs</td>
+													<td>OT Hrs</td>
+													<td>Total Hrs</td>
+													<td>non-billable</td>
+													<td>Hours Code</td>
+												</tr>
+												<tr class="tabledetail">
+													<td>Total</td>
+													<td>{{regularTotal | number:2}}</td>
+													<td>{{otTotal | number:2}}</td>
+													<td>{{totalHr | number:2}}</td>
+													<td>{{nbTotal}}</td>
+													<td>&nbsp;</td>
+													<td>{{finalTotal}}</td>
+													<td>&nbsp;</td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Sunday | date: 'MM/dd/yyyy'}} - Sunday</td>
+													<td><input class="tableInput" ng-model="sunRValue"
+														ng-change="callChange(0)" disabled /></td>
+													<td><input class="tableInput" ng-model="sunOTValue"
+														ng-change="callChange(0)" disabled /></td>
+													<td>{{sunTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.sunNon}}" disabled></td>
+													<td><input ng-model="sunCodeValue" disabled="disabled" /></td>
+													<td></td>
+													<td><input value="{{detailInfo.sunTasks}}" disabled /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Monday | date: 'MM/dd/yyyy'}} - Monday</td>
+													<td><input class="tableInput" ng-model="monRValue"
+														ng-change="callChange(1)" disabled /></td>
+													<td><input class="tableInput" ng-model="monOTValue"
+														ng-change="callChange(1)" disabled /></td>
+													<!--  <td>{{monRValue + monOTValue | number:2}}</td> -->
+													<td>{{monTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.monNon}}" disabled /></td>
+													<td><input ng-model="monCodeValue" disabled="disabled" /></td>
+													<td></td>
+													<td><input value="{{detailInfo.monTasks}}" disabled /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Tuesday| date: 'MM/dd/yyyy'}} - Tuesday</td>
+													<td><input class="tableInput" ng-model="tueRValue"
+														ng-change="callChange(2)" disabled /></td>
+													<td><input class="tableInput" ng-model="tueOTValue"
+														ng-change="callChange(2)" disabled /></td>
+													<td>{{tueTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.tueNon}}" disabled /></td>
+													<td><input ng-model="tueCodeValue" disabled="disabled" /></td>
+													<td></td>
+													<td><input value="{{detailInfo.tueTasks}}" disabled /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Wednesday | date: 'MM/dd/yyyy'}} -
+														Wednesday</td>
+													<td><input class="tableInput" ng-model="wedRValue"
+														ng-change="callChange(3)" disabled /></td>
+													<td><input class="tableInput" ng-model="wedOTValue"
+														ng-change="callChange(3)" disabled /></td>
+													<td>{{wedTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.wedNon}}" disabled></td>
+													<td><input ng-model="wedCodeValue" disabled="disabled" /></td>
+													<td></td>
+													<td><input value="{{detailInfo.wedTasks}}" disabled /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Thursday | date: 'MM/dd/yyyy'}} - Thursday</td>
+													<td><input class="tableInput" ng-model="thuRValue"
+														ng-change="callChange(4)" disabled /></td>
+													<td><input class="tableInput" ng-model="thuOTValue"
+														ng-change="callChange(4)" disabled /></td>
+													<td>{{thuTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.thuNon}}" disabled /></td>
+													<td><input ng-model="thuCodeValue" disabled="disabled" /></td>
+													<td></td>
+													<td><input value="{{detailInfo.thuTasks}}" disabled /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Friday | date: 'MM/dd/yyyy'}} - Friday</td>
+													<td><input class="tableInput" ng-model="friRValue"
+														ng-change="callChange(5)" disabled /></td>
+													<td><input class="tableInput" ng-model="friOTValue"
+														ng-change="callChange(5)" disabled /></td>
+													<td>{{friTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.friNon}}" disabled></td>
+													<td><input ng-model="friCodeValue" disabled="disabled" /></td>
+													<td></td>
+													<td><input value="{{detailInfo.friTasks}}" disabled /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Saturday | date: 'MM/dd/yyyy'}} - Saturday</td>
+													<td><input class="tableInput" ng-model="satRValue"
+														ng-change="callChange(6)" disabled /></td>
+													<td><input class="tableInput" ng-model="satOTValue"
+														ng-change="callChange(6)" disabled /></td>
+													<td>{{satTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.satNon}}" disabled></td>
+													<td><input ng-model="satCodeValue" disabled="disabled" /></td>
+													<td></td>
+													<td><input value="{{detailInfo.satTasks}}" disabled /></td>
+												</tr>
+												<tr>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+
+
+							</div>
+							<!-- close panel body -->
+						</div>
+
+					</div>
+
+					<!-- Open Edit Timesheet -->
+					<div ng-hide="editTimesheetShow">
+						<div class="panel panel-default panel-warning">
+							<div class="panel-heading tableTitle">Edit Timesheet</div>
+							<div class="panel-body">
+								<!-- Open select row -->
+								<div class="row">
+									<div class="col-sm-11 col-sm-offset-1">
+										<form class="form-horizontal" role="form">
+											<div class="form-group">
+												<input type="submit" class="btn btn-info"
+													ng-click="saveimesheet()" value="Save"> <input
+													type="submit" class="btn btn-primary"
+													ng-click="closeTimesheet()" value="Close">
+												<!-- 	<input type="submit" class="btn btn-success"
+												ng-click="printHtml()" value="Print(html)"> -->
+												<input type="submit" class="btn btn-info"
+													ng-click="printPdf()" value="Print(pdf)"> <input
+													type="submit" class="btn btn-primary"
+													ng-click="submitTimesheet()" value="Submit">
+												<div class="label label-danger" ng-hide="saveMessageShow">{{saveMessage}}</div>
+												<div class="label label-success" ng-hide="saveShow">{{save}}</div>
+											</div>
+										</form>
+									</div>
+								</div>
+								<!-- Close Select Row -->
+
+								<div class="panel panel-default panel-warning">
+									<div class="panel-heading tableTitle" align="center">Timesheet
+										Information</div>
+									<div class="panel-body">
+										<div class="label label-warning">***PLEASE review before
+											submit, Make sure you entered the hours correctly for each
+											day. You will not be able to edit after your submit.</div>
+										<table
+											class="tableTimesheet contentTable table table-bordered bootstrap-datatable datatable ">
+											<tbody>
+												<tr>
+													<th>Employee Name</th>
+													<td>{{params.userName}}</td>
+													<th>Placement</th>
+													<td>{{client}}</td>
+												</tr>
+												<tr>
+													<th>Start Date</th>
+													<td>{{date_Sunday | date: 'MM/dd/yyyy'}}</td>
+													<th>End Date</th>
+													<td>{{date_Saturday | date: 'MM/dd/yyyy'}}</td>
+												</tr>
+												<tr>
+													<th><h4>
+															<label class="label label-default" for="fileToUpload">Select
+																a File to Upload</label>
+														</h4> <!-- <label for="fileToUpload">Select a File to Upload</label> -->
+														<br /> <input class="label label-default" type="file"
+																	  ng-model-instant id="fileToUpload"
+														onchange="angular.element(this).scope().setFiles(this)" />
+														<div ng-show="files.length">
+															<!--  <div ng-repeat="file in files.slice(0)">
+            <span>{{file.webkitRelativePath || file.name}}</span>
+            (<span ng-switch="file.size > 1024*1024">
+                <span ng-switch-when="true">{{file.size / 1024 / 1024 | number:2}} MB</span>
+                <span ng-switch-default>{{file.size / 1024 | number:2}} kB</span>
+            </span>)
+        </div> -->
+															<input type="button" class="btn btn-success btn-xs"
+																ng-click="uploadFile()" value="Upload"
+																ng-hide="uploadButton" />
+															<div ng-show="progressVisible">
+																<!-- <div class="percent">{{progress}}%</div> -->
+																<progressbar animate="false" value="progress"
+																	type="info">
+																<b>{{progress}}%</b></progressbar>
+
+															</div>
+														</div></th>
+													<td>{{URL}}
+														<button type="button" class="btn btn-default btn-sm"
+															ng-hide="viewPdfButton" ng-click="viewPDF(URL)">
+															<span class="glyphicon glyphicon-open"></span>
+														</button> <!-- <input type="submit" class="btn btn-success" 
+												ng-click="viewPDF()" value="View PDF"> -->
+
+													</td>
+													<th>Comments</th>
+													<td><input ng-model="comments"></td>
+												</tr>
+
+												<tr>
+
+													<!--  <form action="./JavaScript/uploadimage.jsp" method="post" enctype="multipart/form-data" name="form1" target="aa">  
+<input type="file" name="file">  
+<input type="submit" name="Submit" value="">  
+</form>  -->
+
+													<!-- Works -->
+													<!-- <h3>File Upload:</h3>
+Select a file to upload: <br />
+<form action="UploadServletNew" method="post"  enctype="multipart/form-data">
+<input type="file" name="file" size="50" />
+<br />
+<input type="submit" value="Upload File" />  -->
+
+
+													<!--  <h3>File Upload:</h3>
+Select a file to upload: <br />
+  <input type="file" name="file1" id="file1" onchange="show();" />
+  <span id="s"></span>  -->
+													<!--   
+   <h3>File Upload:</h3>
+Select a file to upload: <br />
+ <input type="file" file-upload multiple/>
+ <br />
+<input type="submit" value="Upload File" ng-click = "save()" /> -->
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+								<div class="panel panel-default panel-success">
+
+									<div class="panel-body">
+
+										<table
+											class=" contentTable table table-bordered bootstrap-datatable datatable ">
+											<tbody>
+												<tr class="tablespecial">
+													<td rowspan="2">Date</td>
+													<td colspan="3">Worked Hours</td>
+													<td colspan="2">Other Hours</td>
+													<td rowspan="2">Total Hrs</td>
+													<td rowspan="2">Tasks</td>
+												</tr>
+												<tr class="tablespecial">
+													<td>Rrgular Hrs</td>
+													<td>OT Hrs</td>
+													<td>Total Hrs</td>
+													<td>non-billable</td>
+													<td>Hours Code</td>
+												</tr>
+												<tr class="tabledetail">
+													<td>Total</td>
+													<td>{{regularTotal | number:2}}</td>
+													<td>{{otTotal | number:2}}</td>
+													<td>{{totalHr | number:2}}</td>
+													<td>{{nbTotal}}</td>
+													<td>&nbsp;</td>
+													<td>{{finalTotal}}</td>
+													<td>&nbsp;</td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Sunday | date: 'MM/dd/yyyy'}} - Sunday</td>
+													<td><input class="tableInput" ng-model="sunRValue"
+														ng-change="callChange(0)" /></td>
+													<td><input class="tableInput" ng-model="sunOTValue"
+														ng-change="callChange(0)" /></td>
+													<td>{{sunTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.sunNon}}"></td>
+													<td><select
+														class="btn btn-default btn-sm dropdown-toggle dropDownList"
+														data-toggle="dropdown" ng-model="getSunCode"
+														ng-options="c.codes for c in hourCode"
+														ng-change="getHourCode()">
+													</select></td>
+													<td></td>
+													<td><input value="{{detailInfo.sunTasks}}" /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Monday | date: 'MM/dd/yyyy'}} - Monday</td>
+													<td><input class="tableInput" ng-model="monRValue"
+														ng-change="callChange(1)" /></td>
+													<td><input class="tableInput" ng-model="monOTValue"
+														ng-change="callChange(1)" /></td>
+													<!--  <td>{{monRValue + monOTValue | number:2}}</td> -->
+													<td>{{monTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.monNon}}" /></td>
+													<td><select
+														class="btn btn-default btn-sm dropdown-toggle dropDownList"
+														data-toggle="dropdown" ng-model="getMonCode"
+														ng-options="c.codes for c in hourCode"
+														ng-change="getHourCode()">
+													</select></td>
+													<td></td>
+													<td><input value="{{detailInfo.monTasks}}" /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Tuesday| date: 'MM/dd/yyyy'}} - Tuesday</td>
+													<td><input class="tableInput" ng-model="tueRValue"
+														ng-change="callChange(2)" /></td>
+													<td><input class="tableInput" ng-model="tueOTValue"
+														ng-change="callChange(2)" /></td>
+													<td>{{tueTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.tueNon}}"></td>
+													<td><select
+														class="btn btn-default btn-sm dropdown-toggle dropDownList"
+														data-toggle="dropdown" ng-model="getTueCode"
+														ng-options="c.codes for c in hourCode"
+														ng-change="getHourCode()">
+													</select></td>
+													<td></td>
+													<td><input value="{{detailInfo.tueTasks}}" /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Wednesday | date: 'MM/dd/yyyy'}} -
+														Wednesday</td>
+													<td><input class="tableInput" ng-model="wedRValue"
+														ng-change="callChange(3)" /></td>
+													<td><input class="tableInput" ng-model="wedOTValue"
+														ng-change="callChange(3)" /></td>
+													<td>{{wedTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.wedNon}}"></td>
+													<td><select
+														class="btn btn-default btn-sm dropdown-toggle dropDownList"
+														data-toggle="dropdown" ng-model="getWedCode"
+														ng-options="c.codes for c in hourCode"
+														ng-change="getHourCode()">
+													</select></td>
+													<td></td>
+													<td><input value="{{detailInfo.wedTasks}}" /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Thursday | date: 'MM/dd/yyyy'}} - Thursday</td>
+													<td><input class="tableInput" ng-model="thuRValue"
+														ng-change="callChange(4)" /></td>
+													<td><input class="tableInput" ng-model="thuOTValue"
+														ng-change="callChange(4)" /></td>
+													<td>{{thuTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.thuNon}}"></td>
+													<td><select
+														class="btn btn-default btn-sm dropdown-toggle dropDownList"
+														data-toggle="dropdown" ng-model="getThuCode"
+														ng-options="c.codes for c in hourCode"
+														ng-change="getHourCode()">
+													</select></td>
+													<td></td>
+													<td><input value="{{detailInfo.thuTasks}}" /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Friday | date: 'MM/dd/yyyy'}} - Friday</td>
+													<td><input class="tableInput" ng-model="friRValue"
+														ng-change="callChange(5)" /></td>
+													<td><input class="tableInput" ng-model="friOTValue"
+														ng-change="callChange(5)" /></td>
+													<td>{{friTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.friNon}}"></td>
+													<td><select
+														class="btn btn-default btn-sm dropdown-toggle dropDownList"
+														data-toggle="dropdown" ng-model="getFriCode"
+														ng-options="c.codes for c in hourCode"
+														ng-change="getHourCode()">
+													</select></td>
+													<td></td>
+													<td><input value="{{detailInfo.friTasks}}" /></td>
+												</tr>
+												<tr class="tabledetail">
+													<td>{{date_Saturday | date: 'MM/dd/yyyy'}} - Saturday</td>
+													<td><input class="tableInput" ng-model="satRValue"
+														ng-change="callChange(6)" /></td>
+													<td><input class="tableInput" ng-model="satOTValue"
+														ng-change="callChange(6)" /></td>
+													<td>{{satTotal | number:2}}</td>
+													<td><input class="tableInput"
+														value="{{detailInfo.satNon}}"></td>
+													<td><select
+														class="btn btn-default btn-sm dropdown-toggle dropDownList"
+														data-toggle="dropdown" ng-model="getSatCode"
+														ng-options="c.codes for c in hourCode"
+														ng-change="getHourCode()">
+													</select></td>
+													<td></td>
+													<td><input value="{{detailInfo.satTasks}}" /></td>
+												</tr>
+												<tr>
+													<div class="label label-danger"
+														ng-hide="inputErrorMessageShow">{{inputErrorMessage}}</div>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-hide="framepdf">
+											<iframe id="output" ng-src="{{pdfUrl}}" height="100%"
+												width="775px"></iframe>
+										</div>
+									</div>
+								</div>
+
+
+
+							</div>
+							<!-- close panel body -->
+						</div>
+					</div>
+					<!-- Close Edit Timesheet -->
+				</div>
+				<!-- Close View Timesheet -->
+				<!-- Close Timesheet -->
+
+
+			</div>
+		</div>
+	</div>
+</div>
